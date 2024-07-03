@@ -13,7 +13,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/posts")
 public class ApiV1PostController {
     @GetMapping("/{id}")
-    public RsData getItem(
+    public RsData<Map<String, Object>> getItem(
             @PathVariable long id
     ) {
         LocalDateTime createDate = LocalDateTime.now();
@@ -21,7 +21,7 @@ public class ApiV1PostController {
         String title = "제목 " + id;
         String body = "내용 " + id;
 
-        return new RsData(
+        return new RsData<>(
                 Map.of(
                         "id", id,
                         "createDate", createDate,
