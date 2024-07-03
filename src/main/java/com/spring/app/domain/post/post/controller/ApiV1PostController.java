@@ -21,7 +21,7 @@ public class ApiV1PostController {
         String title = "제목 " + id;
         String body = "내용 " + id;
 
-        return new RsData<>(
+        return RsData.of(
                 Map.of(
                         "id", id,
                         "createDate", createDate,
