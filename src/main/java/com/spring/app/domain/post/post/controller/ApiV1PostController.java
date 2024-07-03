@@ -21,11 +21,16 @@ public class ApiV1PostController {
         String body = "내용 " + id;
 
         return Map.of(
-                "id", id,
-                "createDate", createDate,
-                "modifyDate", modifyDate,
-                "title", title,
-                "body", body
+                "resultCode", "S-200",
+                "statusCode", 200,
+                "msg", "성공",
+                "body", Map.of(
+                        "id", id,
+                        "createDate", createDate,
+                        "modifyDate", modifyDate,
+                        "title", title,
+                        "body", body
+                )
         );
     }
 }
