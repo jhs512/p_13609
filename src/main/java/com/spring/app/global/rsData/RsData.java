@@ -11,6 +11,10 @@ public class RsData {
     private final String msg;
     private final Map<String, Object> body;
 
+    public RsData(Map<String, Object> body) {
+        this("S-200", "성공", body);
+    }
+
     public RsData(String resultCode, String msg, Map<String, Object> body) {
         this.resultCode = resultCode;
         this.statusCode = Integer.parseInt(resultCode.split("-", 2)[1]);
