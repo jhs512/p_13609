@@ -4,9 +4,15 @@ import com.spring.app.domain.post.post.entity.Post;
 import com.spring.app.global.rsData.RsData;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/posts")
 public class ApiV1PostController {
+    private long postsLastId = 0;
+    private List<Post> posts = new ArrayList<>();
+
     public record PostGetItemResBody(Post item) {
     }
 
@@ -29,7 +35,7 @@ public class ApiV1PostController {
 
     @PostMapping("")
     public RsData<PostWriteItemResBody> write() {
-        long id = 1000;
+        long id = ++postsLastId;
 
         Post post = Post.builder()
                 .id(id)
@@ -37,6 +43,12 @@ public class ApiV1PostController {
                 .body("내용 " + id)
                 .build();
 
-        return RsData.of(new PostWriteItemResBody(post));
+        posts.add(post);
+
+        return RsData.of(
+                "S-200",
+                "%d번 글이 생성되었습니다.".formatted(id),
+                new PostWriteItemResBody(post)
+        );
     }
 }
