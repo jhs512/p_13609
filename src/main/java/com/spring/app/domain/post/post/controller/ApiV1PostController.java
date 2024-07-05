@@ -29,11 +29,11 @@ public class ApiV1PostController {
     public RsData<PostGetItemResBody> getItem(
             @PathVariable long id
     ) {
-        Post post = Post.builder()
-                .id(id)
-                .title("제목 " + id)
-                .body("내용 " + id)
-                .build();
+        Post post = posts
+                .stream()
+                .filter(it -> it.getId() == id)
+                .findFirst()
+                .orElseThrow();
 
         return RsData.of(new PostGetItemResBody(post));
     }
