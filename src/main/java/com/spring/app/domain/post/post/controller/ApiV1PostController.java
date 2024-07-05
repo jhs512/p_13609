@@ -13,6 +13,15 @@ public class ApiV1PostController {
     private long postsLastId = 0;
     private List<Post> posts = new ArrayList<>();
 
+    public record PostGetItemsResBody(List<Post> items) {
+    }
+
+    @GetMapping("")
+    public RsData<PostGetItemsResBody> getItems() {
+        return RsData.of(new PostGetItemsResBody(posts.reversed()));
+    }
+
+
     public record PostGetItemResBody(Post item) {
     }
 
