@@ -1,5 +1,6 @@
 package com.spring.app.domain.post.post.controller;
 
+import com.spring.app.domain.post.post.dto.PostDto;
 import com.spring.app.domain.post.post.entity.Post;
 import com.spring.app.global.rsData.RsData;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +14,22 @@ public class ApiV1PostController {
     private long postsLastId = 0;
     private List<Post> posts = new ArrayList<>();
 
-    public record PostGetItemsResBody(List<Post> items) {
+
+    public record PostGetItemsResBody(List<PostDto> items) {
     }
 
     @GetMapping("")
     public RsData<PostGetItemsResBody> getItems() {
-        return RsData.of(new PostGetItemsResBody(posts.reversed()));
+        return RsData.of(new PostGetItemsResBody(
+                posts.reversed()
+                        .stream()
+                        .map(PostDto::new)
+                        .toList()
+        ));
     }
 
 
-    public record PostGetItemResBody(Post item) {
+    public record PostGetItemResBody(PostDto item) {
     }
 
     @GetMapping("/{id}")
@@ -35,17 +42,17 @@ public class ApiV1PostController {
                 .findFirst()
                 .orElseThrow();
 
-        return RsData.of(new PostGetItemResBody(post));
+        return RsData.of(new PostGetItemResBody(new PostDto(post)));
     }
 
 
     public record PostWriteItemReqBody(
             String title,
-            String body
+            String content
     ) {
     }
 
-    public record PostWriteItemResBody(Post item) {
+    public record PostWriteItemResBody(PostDto item) {
     }
 
     @PostMapping("")
@@ -57,7 +64,7 @@ public class ApiV1PostController {
         Post post = Post.builder()
                 .id(id)
                 .title(reqBody.title)
-                .body(reqBody.body)
+                .body(reqBody.content)
                 .build();
 
         posts.add(post);
@@ -65,7 +72,7 @@ public class ApiV1PostController {
         return RsData.of(
                 "S-200",
                 "%d번 글이 생성되었습니다.".formatted(id),
-                new PostWriteItemResBody(post)
+                new PostWriteItemResBody(new PostDto(post))
         );
     }
 }
