@@ -39,17 +39,25 @@ public class ApiV1PostController {
     }
 
 
+    public record PostWriteItemReqBody(
+            String title,
+            String body
+    ) {
+    }
+
     public record PostWriteItemResBody(Post item) {
     }
 
     @PostMapping("")
-    public RsData<PostWriteItemResBody> write() {
+    public RsData<PostWriteItemResBody> write(
+            @RequestBody PostWriteItemReqBody reqBody
+    ) {
         long id = ++postsLastId;
 
         Post post = Post.builder()
                 .id(id)
-                .title("제목 " + id)
-                .body("내용 " + id)
+                .title(reqBody.title)
+                .body(reqBody.body)
                 .build();
 
         posts.add(post);
